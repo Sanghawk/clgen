@@ -39,4 +39,15 @@ Documentation = "https://github.com/sanghawk/clgen#readme"
 clgen = "clgen:main"
 
 [tool.setuptools]
-packages = ["clgen"] 
+packages = ["clgen"]
+
+[project.optional-dependencies]
+dev = [
+    "pytest>=8.3.5",
+    "pytest-cov>=6.1.1",
+    "black>=25.1.0",
+    "isort>=6.0.1",
+    "mypy>=1.15.0",
+    "flake8>=7.2.0",
+    "pre-commit>=3.7.0",
+] 
