@@ -3,10 +3,10 @@ from click import Group
 
 from clgen.config import Config
 
-openai_group = Group("openai", help="OpenAI API settings")
+openai_command_group = Group("openai", help="OpenAI API settings")
 
 
-@openai_group.command("get-key")
+@openai_command_group.command("get-key")
 @click.pass_obj
 def get_key(cfg: Config):
     """Show your current OpenAI key (masked)."""
@@ -14,7 +14,7 @@ def get_key(cfg: Config):
     click.echo("No key set." if not key else f"****{key[-4:]}")
 
 
-@openai_group.command("set-key")
+@openai_command_group.command("set-key")
 @click.argument("key")
 @click.pass_obj
 def set_key(cfg: Config, key: str):
@@ -23,14 +23,14 @@ def set_key(cfg: Config, key: str):
     click.echo("Key saved.")
 
 
-@openai_group.command("get-model")
+@openai_command_group.command("get-model")
 @click.pass_obj
 def get_model(cfg: Config):
     """Show your current OpenAI model."""
     click.echo(cfg.openai_model)
 
 
-@openai_group.command("set-model")
+@openai_command_group.command("set-model")
 @click.argument("model")
 @click.pass_obj
 def set_model(cfg: Config, model: str):

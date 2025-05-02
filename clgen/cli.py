@@ -4,13 +4,20 @@ Command-line interface for clgen.
 """
 import importlib.metadata
 import logging
+from pathlib import Path
 
 import click
 
-from .command_groups.config import config_group
 from .config import Config
+from .config_commands import config_command_group
+from .utils.cl_generator import ChangelogGenerator
+from .utils.git_helpers import get_commits
 
 __version__ = importlib.metadata.version("clgen")
+
+"""
+clgen
+"""
 
 
 @click.group()
@@ -25,4 +32,45 @@ def cli(ctx: click.Context, verbose: bool) -> None:
     ctx.obj = Config()
 
 
-cli.add_command(config_group)
+"""
+clgen config
+"""
+cli.add_command(config_command_group)
+
+
+"""
+clgen generate
+"""
+
+
+@cli.command("generate")
+@click.option("--since", help="Start point for changelog (tag or commit SHA).")
+@click.option(
+    "--until", default="HEAD", show_default=True, help="End point for changelog."
+)
+@click.option("-o", "--output", type=click.Path(dir_okay=False), help="Write to file.")
+@click.pass_obj
+def generate(cfg: Config, since: str, until: str, output: str | None):
+    """Generate a changelog based on a git repository."""
+    if not cfg.openai_key:
+        raise click.UsageError(
+            "No OpenAI key set. Run `clgen config openai set-key <openai-key>` first."
+        )
+
+    repo_path = Path.cwd()
+    commits = get_commits(repo_path, since, until)
+    if not commits:
+        click.echo("No commits found in that range.", err=True)
+        raise SystemExit(1)
+
+    gen = ChangelogGenerator(
+        api_key=cfg.openai_key,
+        model=cfg.openai_model,
+    )
+    changelog_md = gen.generate(commits)
+
+    if output:
+        Path(output).write_text(changelog_md)
+        click.echo(f"Changelog written to {output}")
+    else:
+        click.echo(changelog_md)
