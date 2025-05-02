@@ -24,12 +24,19 @@ classifiers = [
     "Programming Language :: Python :: 3.12",
 ]
 dependencies = [
+    "click~=8.1",
+    "openai~=1.76",
+    "tomli>=2.0.1",
+    "tomli-w>=1.0.0",
 ]
 
 [project.urls]
 Homepage = "https://github.com/sanghawk/clgen"
 Repository = "https://github.com/sanghawk/clgen.git"
 Documentation = "https://github.com/sanghawk/clgen#readme"
+
+[project.scripts]
+clgen = "clgen:main"
 
 [tool.setuptools]
 packages = ["clgen"] 
