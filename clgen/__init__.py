@@ -1,7 +1,13 @@
+# clgen/__init__.py
 """
 clgen - AI-powered changelog generator
 """
 
-from .generator import generate_changelog
+from .cli import cli
 
-__all__ = ["generate_changelog"]
+__all__ = ["cli"]
+
+
+def main() -> None:
+    """Entry point for the CLI."""
+    cli()

@@ -24,6 +24,10 @@ classifiers = [
     "Programming Language :: Python :: 3.12",
 ]
 dependencies = [
+    "click~=8.1",
+    "openai~=1.76",
+    "tomli>=2.0.1",
+    "tomli-w>=1.0.0",
 ]
 
 [project.urls]
@@ -31,5 +35,19 @@ Homepage = "https://github.com/sanghawk/clgen"
 Repository = "https://github.com/sanghawk/clgen.git"
 Documentation = "https://github.com/sanghawk/clgen#readme"
 
+[project.scripts]
+clgen = "clgen:main"
+
 [tool.setuptools]
-packages = ["clgen"] 
+packages = ["clgen"]
+
+[project.optional-dependencies]
+dev = [
+    "pytest>=8.3.5",
+    "pytest-cov>=6.1.1",
+    "black>=25.1.0",
+    "isort>=6.0.1",
+    "mypy>=1.15.0",
+    "flake8>=7.2.0",
+    "pre-commit>=3.7.0",
+] 
