@@ -7,6 +7,7 @@ import logging
 
 import click
 
+from .command_groups.config import config_group
 from .config import Config
 
 __version__ = importlib.metadata.version("clgen")
@@ -24,45 +25,4 @@ def cli(ctx: click.Context, verbose: bool) -> None:
     ctx.obj = Config()
 
 
-@cli.group()
-def config() -> None:
-    """Manage settings."""
-    pass
-
-
-@config.group()
-def openai() -> None:
-    """OpenAI API settings."""
-    pass
-
-
-@openai.command("get-key")
-@click.pass_obj
-def get_key(cfg: Config) -> None:
-    key = cfg.openai_key
-    if not key:
-        click.echo("No key set.")
-    else:
-        click.echo(f"****{key[-4:]}")
-
-
-@openai.command("set-key")
-@click.argument("key")
-@click.pass_obj
-def set_key(cfg: Config, key: str) -> None:
-    cfg.openai_key = key
-    click.echo("Key saved.")
-
-
-@openai.command("get-model")
-@click.pass_obj
-def get_model(cfg: Config) -> None:
-    click.echo(cfg.openai_model)
-
-
-@openai.command("set-model")
-@click.argument("model")
-@click.pass_obj
-def set_model(cfg: Config, model: str) -> None:
-    cfg.openai_model = model
-    click.echo(f"Model set to {model}")
+cli.add_command(config_group)
