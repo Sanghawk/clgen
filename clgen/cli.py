@@ -7,8 +7,8 @@ import logging
 
 import click
 
-from .command_groups.config import config_group
 from .config import Config
+from .config_commands import config_command_group
 
 __version__ = importlib.metadata.version("clgen")
 
@@ -25,4 +25,4 @@ def cli(ctx: click.Context, verbose: bool) -> None:
     ctx.obj = Config()
 
 
-cli.add_command(config_group)
+cli.add_command(config_command_group)
