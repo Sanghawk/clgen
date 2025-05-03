@@ -49,15 +49,23 @@ clgen generate
     "--until", default="HEAD", show_default=True, help="End point for changelog."
 )
 @click.option("-o", "--output", type=click.Path(dir_okay=False), help="Write to file.")
+@click.option(
+    "--repo-path",
+    type=click.Path(exists=True),
+    default=".",
+    help="Path to the Git repo.",
+)
 @click.pass_obj
-def generate(cfg: Config, since: str, until: str, output: str | None):
+def generate(
+    cfg: Config, since: str, until: str, output: str | None, repo_path: Path | None
+):
     """Generate a changelog based on a git repository."""
     if not cfg.openai_key:
         raise click.UsageError(
             "No OpenAI key set. Run `clgen config openai set-key <openai-key>` first."
         )
 
-    repo_path = Path.cwd()
+    repo_path = repo_path if repo_path else Path.cwd()
     commits = get_commits(repo_path, since, until)
     if not commits:
         click.echo("No commits found in that range.", err=True)
