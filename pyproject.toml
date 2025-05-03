@@ -38,8 +38,10 @@ Documentation = "https://github.com/sanghawk/clgen#readme"
 [project.scripts]
 clgen = "clgen:main"
 
-[tool.setuptools]
-packages = ["clgen"]
+[tool.setuptools.packages.find]         # ← NEW block
+where   = ["."]
+include = ["clgen*"]                    # picks up clgen and any sub‑dirs
+exclude = ["tests*"]
 
 [project.optional-dependencies]
 dev = [
